@@ -1,0 +1,33 @@
+<div class="p-3">
+    <div class="card">
+        <div  class="card-body">
+            <div class="card-title">
+                <h4>Leaves</h4>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Leave Type</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Day</th>
+                        <th>Resume Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let leave of leaves">
+
+                        <td>{{leave.name}}</td>
+                        <td>{{leave.leaveType}}</td>
+                        <td>{{leave.startDate}}</td>
+                        <td>{{leave.endDate}}</td>
+                        <td>{{leave.dayTaken}}</td>
+                        <td>{{leave.resumeDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
