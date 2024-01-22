@@ -30,8 +30,8 @@ public class SecurityConfig {
 
         return http
         .cors(Customizer.withDefaults())
-        .authorizeHttpRequests(auth->auth.anyRequest().permitAll())
-       // .authorizeHttpRequests(auth->auth.anyRequest().authenticated())
+       // .authorizeHttpRequests(auth->auth.anyRequest().permitAll())
+       .authorizeHttpRequests(auth->auth.anyRequest().authenticated())
         .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthConverter)))
         .build();
     }
