@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import {KeycloakProfile} from "keycloak-js";
-import { AccountService } from 'src/app/auth/account.service';
 
 
 @Component({
@@ -12,13 +11,16 @@ import { AccountService } from 'src/app/auth/account.service';
 export class NavbarComponent implements OnInit {
 
   public profile? : KeycloakProfile;
-  constructor(private keycloakService:KeycloakService, public accountService:AccountService){}
+  constructor(public keycloakService:KeycloakService){}
   
-  ngOnInit(): void {
-    
-       this.keycloakService.loadUserProfile().then(profile=>{
+ async ngOnInit() {
+  
+    if (await this.keycloakService.isLoggedIn()) {
+      this.keycloakService.loadUserProfile().then(profile=>{
         this.profile=profile;
       });
+    }
+      
   }
 
   login():void{

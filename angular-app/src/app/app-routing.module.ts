@@ -4,12 +4,13 @@ import { LeaveComponent } from './leave/leave.component';
 import { AuthGuard } from './auth/auth-guard.guard';
 
 const routes: Routes = [
-    {path:"leaves", 
-    component:LeaveComponent, 
-    canActivate:[AuthGuard],
-    data:{
-      roles:['admin']
-    }
+    {
+      path:"leaves", 
+      component:LeaveComponent, 
+      canActivate:[AuthGuard],
+      data:{
+        roles:['ADMIN']
+      }
   }
 ];
 
