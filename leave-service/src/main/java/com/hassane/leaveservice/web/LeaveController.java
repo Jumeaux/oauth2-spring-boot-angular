@@ -20,7 +20,7 @@ public class LeaveController {
     }
 
     @GetMapping("/leaves")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Leave> getAllLeaves() {
         return leaveRepository.findAll();
     }

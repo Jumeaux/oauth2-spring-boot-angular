@@ -1,0 +1,35 @@
+services:
+  leave-service-db:
+    image: postgres
+    container_name: leave-service-db
+    restart: always
+    volumes:
+      - ~/volumes/leave/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB: leaveapp
+      - POSTGRES_USER: leave
+      - POSTGRES_PASSWORD: leave
+      - POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+  
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: med@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: azer
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  leave-service:
+    build: ./leave-service
+    container_name: leave-service
+    ports:
+      - 8090:8090
+    environment:
+      - DATABASE_URL=jdbc:postgresql://leave-service-db:5432/leaveapp
