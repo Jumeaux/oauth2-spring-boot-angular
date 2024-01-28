@@ -9,10 +9,30 @@ services:
       - POSTGRES_DB: leaveapp
       - POSTGRES_USER: leave
       - POSTGRES_PASSWORD: leave
-      - POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - 5432:5432
-  
+      - '5434:5434'
+    healthcheck:
+      test: "exit 0"
+
+
+  keycloak-db:
+    image: postgres
+    container_name: keycloak-db
+    restart: always
+    volumes:
+      - ~/volumes/keycloak/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB: keycloak_db
+      - POSTGRES_USER: keycloak
+      - POSTGRES_PASSWORD: keycloak
+
+    ports:
+      - '5433:5433'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -21,8 +41,8 @@ services:
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: med@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: azer
+      PGADMIN_DEFAULT_EMAIL: hassane@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: azerty
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
@@ -31,5 +51,33 @@ services:
     container_name: leave-service
     ports:
       - 8090:8090
+    expose:
+      - 8089
+    restart: always
+    depends_on:
+      - leave-service-db
     environment:
-      - DATABASE_URL=jdbc:postgresql://leave-service-db:5432/leaveapp
+      - DATABASE_URL=jdbc:postgresql://leave-service-db:5434/leaveapp
+
+    
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5433/keycloak_db
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+     
+    command:
+      - start-dev
+    restart: always
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+    depends_on:
+      - keycloak-db
