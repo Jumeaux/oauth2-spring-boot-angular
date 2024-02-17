@@ -50,9 +50,9 @@ services:
     build: ./leave-service
     container_name: leave-service
     ports:
-      - 8090:8090
+      - '8090:8090'
     expose:
-      - 8089
+      - '8090'
     restart: always
     depends_on:
       - leave-service-db
@@ -71,7 +71,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME_STRICT_HTTPS: "false"
-     
+      
     command:
       - start-dev
     restart: always
@@ -81,3 +81,14 @@ services:
       - '8080'
     depends_on:
       - keycloak-db
+
+
+  angular-app:
+    build: ./angular-app
+    container_name: angular-app
+    ports:
+      - '8088:80'
+    expose:
+      - '8088'
+    restart: always
+    depends_on:
